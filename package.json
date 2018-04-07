@@ -1,0 +1,32 @@
+{
+  "name": "navaid",
+  "version": "0.0.0",
+  "repository": "lukeed/navaid",
+  "description": "WIP",
+  "module": "dist/navaid.es.js",
+  "main": "dist/navaid.js",
+  "license": "MIT",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "lukeed.com"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "scripts": {
+    "build": "node builder"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+  ],
+  "devDependencies": {
+    "gzip-size": "^3.0.0",
+    "mk-dirs": "^1.0.0",
+    "pretty-bytes": "^4.0.2",
+    "rewrite-imports": "^1.0.0",
+    "uglify-js": "^3.2.0"
+  }
+}
