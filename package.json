@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "repository": "lukeed/navaid",
   "description": "WIP",
+  "umd:main": "dist/navaid.umd.js",
   "module": "dist/navaid.es.js",
   "main": "dist/navaid.js",
+  "umd:name": "Navaid",
   "license": "MIT",
   "author": {
     "name": "Luke Edwards",
@@ -24,9 +26,11 @@
   ],
   "devDependencies": {
     "gzip-size": "^3.0.0",
-    "mk-dirs": "^1.0.0",
     "pretty-bytes": "^4.0.2",
-    "rewrite-imports": "^1.0.0",
+    "rollup": "^0.57.1",
+    "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^3.0.0",
     "uglify-js": "^3.2.0"
   }
 }
