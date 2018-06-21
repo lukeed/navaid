@@ -1,5 +1,4 @@
-import filter from '@arr/filter';
-import { exec, match, parse } from 'matchit';
+import convert from 'regexparam';
 
 export default function Navaid(opts) {
 	opts = opts || {};
@@ -8,34 +7,31 @@ export default function Navaid(opts) {
 	let base = opts.base || opts.history ? '/' : location.pathname;
 	let baselen = base.length;
 
-	$.toPath = str => {
-		return str.indexOf(base) === 0 ? str.substring(baselen) || '/' : str;
+	$.toPath = uri => {
+		return uri.indexOf(base) === 0 ? uri.substring(baselen) || '/' : uri;
 	}
 
-	$.on = (uri, fn) => {
-		handlers[uri] = fn;
-		routes.push(parse(uri));
+	$.on = (pat, fn) => {
+		handlers[pat] = fn;
+		let o = convert(pat);
+		o.old = pat;
+		routes.push(o);
 		return $;
 	}
 
-	$.off = (uri) => {
-		delete handlers[uri];
-		routes = filter(routes, x => x.old !== uri);
+	$.off = (pat) => {
+		delete handlers[pat];
+		routes = routes.filter(x => x.old !== pat);
 		return $;
-	}
-
-	$.find = uri => {
-		let arr = match(uri, routes);
-		if (arr.length === 0) return false;
-		return {
-			params: exec(uri, arr),
-			handler: handlers[arr[0].old]
-		};
 	}
 
 	$.run = uri => {
-		let obj = $.find(uri);
-		if (obj) obj.handler(obj.params);
+		let obj = routes.find(x => x.pattern.test(uri));
+		if (obj) {
+			let i=0, params={}, arr=obj.pattern.exec(path);
+			while (i < obj.keys.length) params[obj.keys[i]]=arr[++i] || null;
+			handlers[obj.old](params); // todo loop?
+		}
 		return $;
 	}
 

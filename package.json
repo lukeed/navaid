@@ -24,8 +24,7 @@
   ],
   "keywords": [],
   "dependencies": {
-    "@arr/filter": "^1.0.0",
-    "matchit": "^1.0.5"
+    "regexparam": "^0.0.1"
   },
   "devDependencies": {
     "gzip-size": "^3.0.0",
