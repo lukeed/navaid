@@ -28,7 +28,7 @@ export default function Navaid(opts) {
 	$.run = uri => {
 		let obj = routes.find(x => x.pattern.test(uri));
 		if (obj) {
-			let i=0, params={}, arr=obj.pattern.exec(path);
+			let i=0, params={}, arr=obj.pattern.exec(uri);
 			while (i < obj.keys.length) params[obj.keys[i]]=arr[++i] || null;
 			handlers[obj.old](params); // todo loop?
 		}
