@@ -46,3 +46,35 @@ function Navaid(opts) {
 export function init(o) {
 	return new Navaid(o);
 }
+
+
+function wrap(type) {
+	type += 'State';
+	let fn = history[type];
+	history[type] = function (uri) {
+		let ev = new Event(type.toLowerCase());
+		ev.uri = uri;
+		fn.apply(this, arguments);
+		return dispatchEvent(ev);
+	}
+}
+
+export function listen(ctx) {
+	wrap('push'); wrap('replace');
+
+	function run(e) {
+		ctx.run(e.uri);
+	}
+
+	addEventListener('popstate', run);
+	addEventListener('replacestate', run);
+	addEventListener('pushstate', run);
+
+	addEventListener('click', e => {
+		let x = e.target.closest('a');
+		if (!x || !x.href || /^_?self$/i.test(x.target)) return;
+		if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
+		ctx.route(x.getAttribute('href'));
+		e.preventDefault();
+	});
+}
