@@ -2,13 +2,12 @@ import convert from 'regexparam';
 
 export default function Navaid(opts) {
 	opts = opts || {};
-
-	let base = opts.base || opts.history ? '/' : location.pathname;
-	let baselen = base.length;
+	let base = opts.base || '';
 	let routes=[], handlers={}, $=this, PAT='route';
 
 	$.toPath = uri => {
-		return uri.indexOf(base) === 0 ? uri.substring(baselen) || '/' : uri;
+		uri = uri.indexOf(base) == 0 ? uri.substring(base.length) : uri;
+		return (uri.charCodeAt(0) == 47) ? uri : '/' + uri;
 	}
 
 	$.on = (pat, fn) => {
