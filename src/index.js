@@ -30,7 +30,7 @@ export default function Navaid(opts) {
 	}
 
 	$.run = uri => {
-		uri = uri || location.pathname;
+		uri = $.toPath(uri || location.pathname);
 		let obj = routes.find(x => x.pattern.test(uri));
 		if (obj) {
 			let i=0, params={}, arr=obj.pattern.exec(uri);
