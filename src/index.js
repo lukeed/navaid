@@ -10,6 +10,11 @@ export default function Navaid(opts) {
 		return (uri.charCodeAt(0) == 47) ? uri : '/' + uri;
 	}
 
+	$.route = (uri, replace) => {
+		uri = $.toPath(uri);
+		history[(replace ? 'replace' : 'push') + 'State'](uri, null, base + uri);
+	}
+
 	$.on = (pat, fn) => {
 		handlers[pat] = fn;
 		let o = convert(pat);
