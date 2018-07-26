@@ -67,7 +67,7 @@ export function listen(ctx) {
 
 	addEventListener('click', e => {
 		let x = e.target.closest('a');
-		if (!x || !x.href || /^_?self$/i.test(x.target)) return;
+		if (!x || !x.href || !!x.target) return;
 		if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
 		ctx.route(x.getAttribute('href'));
 		e.preventDefault();
