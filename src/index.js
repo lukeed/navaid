@@ -1,6 +1,6 @@
 import convert from 'regexparam';
 
-function Navaid(opts) {
+export default function Navaid(opts) {
 	opts = opts || {};
 	let base = opts.base || '';
 	let routes=[], handlers={}, $=this, PAT='route';
@@ -38,9 +38,6 @@ function Navaid(opts) {
 	return $;
 }
 
-export function init(o) {
-	return new Navaid(o);
-}
 
 
 function wrap(type) {
