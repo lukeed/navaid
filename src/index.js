@@ -55,6 +55,8 @@ export default function Navaid(opts) {
 		addEventListener('replacestate', run);
 		addEventListener('pushstate', run);
 		addEventListener('click', click);
+
+		return $.run();
 	}
 
 	return $;
