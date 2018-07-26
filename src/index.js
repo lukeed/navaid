@@ -35,10 +35,30 @@ export default function Navaid(opts) {
 		return $;
 	}
 
+	$.listen = () => {
+		wrap('push');
+		wrap('replace');
+
+		function run(e) {
+			$.run(e.uri);
+		}
+
+		function click(e) {
+			let x = e.target.closest('a');
+			if (!x || !x.href || !!x.target) return;
+			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
+			$.route(x.getAttribute('href'));
+			e.preventDefault();
+		}
+
+		addEventListener('popstate', run);
+		addEventListener('replacestate', run);
+		addEventListener('pushstate', run);
+		addEventListener('click', click);
+	}
+
 	return $;
 }
-
-
 
 function wrap(type) {
 	type += 'State';
@@ -49,24 +69,4 @@ function wrap(type) {
 		fn.apply(this, arguments);
 		return dispatchEvent(ev);
 	}
-}
-
-export function listen(ctx) {
-	wrap('push'); wrap('replace');
-
-	function run(e) {
-		ctx.run(e.uri);
-	}
-
-	addEventListener('popstate', run);
-	addEventListener('replacestate', run);
-	addEventListener('pushstate', run);
-
-	addEventListener('click', e => {
-		let x = e.target.closest('a');
-		if (!x || !x.href || !!x.target) return;
-		if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
-		ctx.route(x.getAttribute('href'));
-		e.preventDefault();
-	});
 }
