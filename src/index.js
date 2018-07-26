@@ -23,12 +23,6 @@ function Navaid(opts) {
 		return $;
 	}
 
-	$.off = (pat) => {
-		delete handlers[pat];
-		routes = routes.filter(x => x[PAT] !== pat);
-		return $;
-	}
-
 	$.run = uri => {
 		uri = $.toPath(uri || location.pathname);
 		let obj = routes.find(x => x.pattern.test(uri));
