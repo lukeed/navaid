@@ -56,6 +56,13 @@ export default function Navaid(opts) {
 		addEventListener('pushstate', run);
 		addEventListener('click', click);
 
+		$.unlisten = () => {
+			removeEventListener('popstate', run);
+			removeEventListener('replacestate', run);
+			removeEventListener('pushstate', run);
+			removeEventListener('click', click);
+		};
+
 		return $.run();
 	}
 
