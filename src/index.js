@@ -5,13 +5,13 @@ function Navaid(opts) {
 	let base = opts.base || '';
 	let routes=[], handlers={}, $=this, PAT='route';
 
-	$.toPath = uri => {
+	let fmt = $.format = uri => {
 		uri = uri.indexOf(base) == 0 ? uri.substring(base.length) : uri;
 		return (uri.charCodeAt(0) == 47) ? uri : '/' + uri;
 	}
 
 	$.route = (uri, replace) => {
-		uri = $.toPath(uri);
+		uri = fmt(uri);
 		history[(replace ? 'replace' : 'push') + 'State'](uri, null, base + uri);
 	}
 
@@ -24,13 +24,14 @@ function Navaid(opts) {
 	}
 
 	$.run = uri => {
-		uri = $.toPath(uri || location.pathname);
+		uri = fmt(uri || location.pathname);
 		let obj = routes.find(x => x.pattern.test(uri));
 		if (obj) {
 			let i=0, params={}, arr=obj.pattern.exec(uri);
 			while (i < obj.keys.length) params[obj.keys[i]]=arr[++i] || null;
 			handlers[obj[PAT]](params); // todo loop?
 		}
+
 		return $;
 	}
 
