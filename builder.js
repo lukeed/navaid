@@ -1,6 +1,5 @@
 const { rollup } = require('rollup');
 const { readFileSync } = require('fs');
-const { minify } = require('uglify-js');
 const pretty = require('pretty-bytes');
 const sizer = require('gzip-size');
 const pkg = require('./package');
