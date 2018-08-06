@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "repository": "lukeed/navaid",
   "description": "WIP",
+  "unpkg": "dist/navaid.umd.js",
   "umd:main": "dist/navaid.umd.js",
   "module": "dist/navaid.es.js",
   "main": "dist/navaid.js",
