@@ -18,7 +18,9 @@
     "node": ">= 6"
   },
   "scripts": {
-    "build": "node builder"
+    "build": "node builder",
+    "pretest": "npm run build",
+    "test": "tape test/*.js | tap-spec"
   },
   "files": [
     "dist"
@@ -34,5 +36,7 @@
     "rollup-plugin-buble": "^0.19.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-uglify": "^3.0.0",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.9.1"
   }
 }
