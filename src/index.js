@@ -2,19 +2,22 @@ import convert from 'regexparam';
 
 export default function Navaid(opts) {
 	opts = opts || {};
-	let base, routes=[], handlers={}, $=this, PAT='route', SEP='/';
+	let rgx, routes=[], handlers={}, $=this, PAT='route';
 
 	let fmt = $.format = uri => {
 		if (!uri) return uri;
-		if (uri[0] != SEP) uri = SEP + uri;
-		return uri.indexOf(base) == 0 ? uri.substring(base.length) : uri;
+		uri = '/' + uri.replace(/^\/|\/$/g, '');
+		return rgx ? rgx.test(uri) && (uri.replace(rgx, '') || '/') : uri;
 	}
 
-	base = fmt(opts.base || '');
+	let base = fmt(opts.base);
+	if (base === '/') base = '';
+	if (base) {
+		rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
+	}
 
 	$.route = (uri, replace) => {
-		uri = fmt(uri);
-		history[(replace ? 'replace' : 'push') + 'State'](uri, null, base + uri);
+		history[(replace ? 'replace' : 'push') + 'State'](base + uri, null, base + uri);
 	}
 
 	$.on = (pat, fn) => {
@@ -33,7 +36,6 @@ export default function Navaid(opts) {
 			while (i < obj.keys.length) params[obj.keys[i]]=arr[++i] || null;
 			handlers[obj[PAT]](params); // todo loop?
 		}
-
 		return $;
 	}
 
@@ -46,11 +48,13 @@ export default function Navaid(opts) {
 		}
 
 		function click(e) {
-			let x = e.target.closest('a');
-			if (!x || !x.href || !!x.target) return;
+			let y, x = e.target.closest('a');
+			if (!x || !x.href || x.target) return;
 			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
-			$.route(x.getAttribute('href'));
-			e.preventDefault();
+			if (y = fmt(x.getAttribute('href'))) {
+				e.preventDefault();
+				$.route(y);
+			}
 		}
 
 		let off = removeEventListener;
