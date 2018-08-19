@@ -5,7 +5,7 @@
   "description": "WIP",
   "unpkg": "dist/navaid.umd.js",
   "umd:main": "dist/navaid.umd.js",
-  "module": "dist/navaid.es.js",
+  "module": "dist/navaid.mjs",
   "main": "dist/navaid.js",
   "umd:name": "Navaid",
   "license": "MIT",
