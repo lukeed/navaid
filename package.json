@@ -2,7 +2,7 @@
   "name": "navaid",
   "version": "0.0.0",
   "repository": "lukeed/navaid",
-  "description": "WIP",
+  "description": "A navigation aid (aka, router) for the browser in 850 bytes~!",
   "unpkg": "dist/navaid.umd.js",
   "umd:main": "dist/navaid.umd.js",
   "module": "dist/navaid.mjs",
@@ -25,7 +25,11 @@
   "files": [
     "dist"
   ],
-  "keywords": [],
+  "keywords": [
+    "browser",
+    "client-side",
+    "router"
+  ],
   "dependencies": {
     "regexparam": "^0.0.1"
   },
