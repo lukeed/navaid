@@ -30,11 +30,14 @@ export default function Navaid(opts) {
 
 	$.run = uri => {
 		uri = fmt(uri || location.pathname);
+		if (!uri) return $;
 		let obj = routes.find(x => x.pattern.test(uri));
 		if (obj) {
 			let i=0, params={}, arr=obj.pattern.exec(uri);
 			while (i < obj.keys.length) params[obj.keys[i]]=arr[++i] || null;
 			handlers[obj[PAT]](params); // todo loop?
+		} else if (opts.on404) {
+			opts.on404(uri);
 		}
 		return $;
 	}
