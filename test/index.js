@@ -167,3 +167,51 @@ test('$.run (wildcard)', t => {
 	ctx.run('foo/bar/baz');
 	ctx.run('foo/bar/baz/bat/quz');
 });
+
+test('$.run (404)', t => {
+	t.plan(11);
+
+	let ran = false;
+	let foo = new Navaid({
+		on404(x) {
+			t.pass('~~> called `on404` handler');
+			let uri = ran ? '/foo/bar' : '/bar';
+			t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+			ran = true;
+		}
+	});
+
+	foo.on('/foo', () => {
+		t.pass('~> called "/foo" route');
+	});
+
+	foo.run('/foo'); // +1
+	foo.run('bar'); // +2
+	foo.run('/foo/bar'); // +2
+
+	ran = false;
+	let bar = new Navaid({
+		base: '/hello/',
+		on404(x) {
+			t.pass('~~> called `on404` handler');
+			let uri = ran ? '/there/world' : '/world';
+			t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+			ran = true;
+		}
+	});
+
+	bar.on('/', () => {
+		t.pass('~> called "/hello" route');
+	});
+
+	bar.on('/bob', () => {
+		t.pass('~> called "/hello/bob" route');
+	});
+
+	bar.run('/hello'); // +1
+	bar.run('/hello/bob'); // +1
+	bar.run('/hello/world'); // +2
+	bar.run('/hello/there/world'); // +2
+	bar.run('/world'); // +0 (base no match)
+	bar.run('/'); // +0 (base no match)
+});
