@@ -151,3 +151,19 @@ test('$.run (base)', t => {
 	ctx.run('hello/world/foo/books/kids');
 	ctx.run('hello/world/foo/books/kids/narnia');
 });
+
+test('$.run (wildcard)', t => {
+	t.plan(4);
+
+	let ran = false;
+	let ctx = new Navaid();
+	ctx.on('foo/bar/*', o => {
+		t.pass('~> called "foo/bar/*" route');
+		let wild = ran ? 'baz/bat/quz' : 'baz';
+		t.same(o, { wild }, '~> o.wild is expected');
+		ran = true;
+	});
+
+	ctx.run('foo/bar/baz');
+	ctx.run('foo/bar/baz/bat/quz');
+});
