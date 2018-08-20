@@ -1,7 +1,6 @@
 import convert from 'regexparam';
 
-export default function Navaid(opts) {
-	opts = opts || {};
+export default function Navaid(base, on404) {
 	let rgx, routes=[], handlers={}, $={}, PAT='route';
 
 	let fmt = $.format = uri => {
@@ -10,11 +9,8 @@ export default function Navaid(opts) {
 		return rgx ? rgx.test(uri) && (uri.replace(rgx, '') || '/') : uri;
 	}
 
-	let base = fmt(opts.base);
-	if (base === '/') base = '';
-	if (base) {
-		rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
-	}
+	if ((base=fmt(base)) === '/') base = '';
+	if (base) rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
 
 	$.route = (uri, replace) => {
 		history[(replace ? 'replace' : 'push') + 'State'](base + uri, null, base + uri);
@@ -35,8 +31,8 @@ export default function Navaid(opts) {
 			let i=0, params={}, arr=obj.pattern.exec(uri);
 			while (i < obj.keys.length) params[obj.keys[i]]=arr[++i] || null;
 			handlers[obj[PAT]](params); // todo loop?
-		} else if (uri && opts.on404) {
-			opts.on404(uri);
+		} else if (uri && on404) {
+			on404(uri);
 		}
 		return $;
 	}
