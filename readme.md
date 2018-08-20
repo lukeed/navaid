@@ -29,10 +29,11 @@ $ npm install --save navaid
 ## Usage
 
 ```js
-const Navaid = require('navaid');
+const navaid = require('navaid');
 
 // Setup router
-let router = new Navaid();
+let router = navaid();
+// or: new Navaid();
 
 // Attach routes
 router
@@ -61,12 +62,11 @@ router.listen();
 
 ## API
 
-### Navaid(options)
+### navaid(base, on404)
 
 Returns: `Navaid`
 
-#### options.base
-
+#### base
 Type: `String`<br>
 Default: `'/'`
 
@@ -76,13 +76,24 @@ All routes will be processed _relative to_ this path (see [`on()`](#onpattern-ha
 
 > **Note:** Navaid will accept a `base` with or without a leading and/or trailing slash, as all cases are handled identically.
 
+#### on404
+Type: `Function`<br>
+Default: `undefined`
+
+The function to run if the incoming pathname did not match any of your defined defined patterns.<br>
+When defined, this function will receive the formatted `uri` as its only paramter; see [`format()`](#formaturi).
+
+> **Important:** Navaid ***only*** processes routes that match your `base` path!<br>
+Put differently, `on404` will never run for URLs that do not begin with `base`.<br>
+This allows you to mount _multiple_ Navaid instances on the same page, each with different `base` paths. :wink:
+
 
 ### format(uri)
 Returns: `String` or `false`
 
-Formats and returns a pathname relative to the [`options.base`](#optionsbase) path.
+Formats and returns a pathname relative to the [`base`](#base) path.
 
-If the `uri` **does not** begin with the `options.base`, then `false` will be returned instead. Otherwise, the return value will always lead with a slash (`/`).
+If the `uri` **does not** begin with the `base`, then `false` will be returned instead. Otherwise, the return value will always lead with a slash (`/`).
 
 > **Note:** This is called automatically within the [`listen()`](#listen) and [`run()`](#runuri) methods.
 
@@ -102,7 +113,7 @@ Type: `String`
 
 The desired path to navigate.
 
-> **Important:** Navaid will prefix your `uri` with the [`options.base`](#optionsbase), if/when defined.
+> **Important:** Navaid will prefix your `uri` with the [`base`](#base), if/when defined.
 
 #### replace
 Type: `Boolean`<br>
@@ -156,8 +167,6 @@ r.on('/users/:id/jobs/*').run('/users/lukeed/jobs/foo/bar/baz/bat');
 //=> { id: 'lukeed', wild: 'foo/bar/baz/bat' }
 ```
 
-
-
 ### run(uri)
 Returns: `Navaid`
 
@@ -184,7 +193,7 @@ These are the (global) events that Navaid creates and/or responds to:
 * replacestate
 * pushstate
 
-Navaid will also bind to any `click` event(s) on anchor tags (`<a href="" />`) so long as the link has a valid `href` that matches the [`base`](#optionsbase) path. Navaid **will not** intercept links that have _any_ `target` attribute or if the link was clicked with a special modifier (eg; <kbd>ALT</kbd>, <kbd>SHIFT</kbd>, <kbd>CMD</kbd>, or <kbd>CTRL</kbd>).
+Navaid will also bind to any `click` event(s) on anchor tags (`<a href="" />`) so long as the link has a valid `href` that matches the [`base`](#base) path. Navaid **will not** intercept links that have _any_ `target` attribute or if the link was clicked with a special modifier (eg; <kbd>ALT</kbd>, <kbd>SHIFT</kbd>, <kbd>CMD</kbd>, or <kbd>CTRL</kbd>).
 
 ### unlisten()
 Returns: `undefined`
