@@ -2,7 +2,7 @@ import convert from 'regexparam';
 
 export default function Navaid(opts) {
 	opts = opts || {};
-	let rgx, routes=[], handlers={}, $=this, PAT='route';
+	let rgx, routes=[], handlers={}, $={}, PAT='route';
 
 	let fmt = $.format = uri => {
 		if (!uri) return uri;
