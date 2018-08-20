@@ -56,7 +56,7 @@ router.run('/books/kids/narnia');
 //=> "~> /books/* { wild: 'kids/narnia' }"
 
 // Run as long-lived router w/ history & "<a>" bindings
-// Also immediately `.run()`s handler for current location
+// Also immediately calls `run()` handler for current location
 router.listen();
 ```
 
