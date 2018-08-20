@@ -1,20 +1,30 @@
 const test = require('tape');
-const Navaid = require('../dist/navaid');
+const navaid = require('../dist/navaid');
 
 test('exports', t => {
-	t.is(typeof Navaid, 'function', 'exports a function');
+	t.is(typeof navaid, 'function', 'exports a function');
 
-	let ctx = new Navaid();
-	t.is(typeof ctx.route, 'function', '~> $.route is a function');
-	t.is(typeof ctx.format, 'function', '~> $.format is a function');
-	t.is(typeof ctx.listen, 'function', '~> $.listen is a function');
-	t.is(typeof ctx.run, 'function', '~> $.run is a function');
-	t.is(typeof ctx.on, 'function', '~> $.on is a function');
+	let foo = new navaid();
+	t.is(typeof foo.route, 'function', '~> $.route is a function');
+	t.is(typeof foo.format, 'function', '~> $.format is a function');
+	t.is(typeof foo.listen, 'function', '~> $.listen is a function');
+	t.is(typeof foo.run, 'function', '~> $.run is a function');
+	t.is(typeof foo.on, 'function', '~> $.on is a function');
+
+	let bar = navaid();
+	t.is(typeof bar.route, 'function', '~> navaid().route is a function');
+	t.is(typeof bar.format, 'function', '~> navaid().format is a function');
+	t.is(typeof bar.listen, 'function', '~> navaid().listen is a function');
+	t.is(typeof bar.run, 'function', '~> navaid().run is a function');
+	t.is(typeof bar.on, 'function', '~> navaid().on is a function');
+
+	t.same(Object.keys(foo), Object.keys(bar), `new Navaid() === navaid()`);
+
 	t.end();
 });
 
 test('$.format', t => {
-	let foo = new Navaid();
+	let foo = navaid();
 	t.is(foo.format(''), '');
 	t.is(foo.format('/'), '/');
 	t.is(foo.format('foo/bar/'), '/foo/bar');
@@ -22,7 +32,7 @@ test('$.format', t => {
 	t.is(foo.format('/foobar'), '/foobar');
 	t.is(foo.format('foobar'), '/foobar');
 
-	let bar = new Navaid({ base: '/hello' });
+	let bar = navaid('/hello');
 	t.is(bar.format('/hello/world'), '/world');
 	t.is(bar.format('hello/world'), '/world');
 	t.is(bar.format('/world'), false);
@@ -31,7 +41,7 @@ test('$.format', t => {
 	t.is(bar.format('/hello'), '/');
 	t.is(bar.format('hello'), '/');
 
-	let baz = new Navaid({ base: 'hello' });
+	let baz = new navaid('hello');
 	t.is(baz.format('/hello/world'), '/world');
 	t.is(baz.format('hello/world'), '/world');
 	t.is(baz.format('/hello.123'), false);
@@ -41,7 +51,7 @@ test('$.format', t => {
 	t.is(baz.format('/hello'), '/');
 	t.is(baz.format('hello'), '/');
 
-	let bat = new Navaid({ base: 'hello/' });
+	let bat = navaid('hello/');
 	t.is(bat.format('/hello/world'), '/world');
 	t.is(bat.format('hello/world'), '/world');
 	t.is(bat.format('/hello.123'), false);
@@ -51,7 +61,7 @@ test('$.format', t => {
 	t.is(bat.format('/hello'), '/');
 	t.is(bat.format('hello'), '/');
 
-	let quz = new Navaid({ base: '/hello/' });
+	let quz = new navaid('/hello/');
 	t.is(quz.format('/hello/world'), '/world');
 	t.is(quz.format('hello/world'), '/world');
 	t.is(quz.format('/hello.123'), false);
@@ -61,13 +71,13 @@ test('$.format', t => {
 	t.is(quz.format('/hello'), '/');
 	t.is(quz.format('hello'), '/');
 
-	let qut = new Navaid({ base: '/' });
+	let qut = navaid('/');
 	t.is(qut.format('/hello/world'), '/hello/world');
 	t.is(qut.format('hello/world'), '/hello/world');
 	t.is(qut.format('/world'), '/world');
 	t.is(qut.format('/'), '/');
 
-	let qar = new Navaid({ base: '/hello/there' });
+	let qar = new navaid('/hello/there');
 	t.is(qar.format('hello/there/world/'), '/world');
 	t.is(qar.format('/hello/there/world/'), '/world');
 	t.is(qar.format('/hello/there/world?foo=bar'), '/world?foo=bar');
@@ -80,7 +90,7 @@ test('$.format', t => {
 });
 
 test('$.on', t => {
-	let ctx = new Navaid();
+	let ctx = new navaid();
 	let foo = ctx.on('/', () => 'index');
 	t.same(ctx, foo, '~> allows chained methods');
 	let bar = foo.on('hello', () => 'world');
@@ -90,7 +100,7 @@ test('$.on', t => {
 
 test('$.run', t => {
 	t.plan(13);
-	let ctx = new Navaid();
+	let ctx = new navaid();
 
 	ctx.on('/', () => {
 		t.pass('~> ran index');
@@ -122,7 +132,7 @@ test('$.run', t => {
 
 test('$.run (base)', t => {
 	t.plan(13);
-	let ctx = new Navaid({ base: '/hello/world/' });
+	let ctx = navaid('/hello/world/');
 
 	ctx.on('/', () => {
 		t.pass('~> ran index');
@@ -156,7 +166,7 @@ test('$.run (wildcard)', t => {
 	t.plan(4);
 
 	let ran = false;
-	let ctx = new Navaid();
+	let ctx = new navaid();
 	ctx.on('foo/bar/*', o => {
 		t.pass('~> called "foo/bar/*" route');
 		let wild = ran ? 'baz/bat/quz' : 'baz';
@@ -172,13 +182,11 @@ test('$.run (404)', t => {
 	t.plan(11);
 
 	let ran = false;
-	let foo = new Navaid({
-		on404(x) {
-			t.pass('~~> called `on404` handler');
-			let uri = ran ? '/foo/bar' : '/bar';
-			t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
-			ran = true;
-		}
+	let foo = navaid('/', x => {
+		t.pass('~~> called `on404` handler');
+		let uri = ran ? '/foo/bar' : '/bar';
+		t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+		ran = true;
 	});
 
 	foo.on('/foo', () => {
@@ -190,14 +198,11 @@ test('$.run (404)', t => {
 	foo.run('/foo/bar'); // +2
 
 	ran = false;
-	let bar = new Navaid({
-		base: '/hello/',
-		on404(x) {
-			t.pass('~~> called `on404` handler');
-			let uri = ran ? '/there/world' : '/world';
-			t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
-			ran = true;
-		}
+	let bar = new navaid('/hello/', x => {
+		t.pass('~~> called `on404` handler');
+		let uri = ran ? '/there/world' : '/world';
+		t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+		ran = true;
 	});
 
 	bar.on('/', () => {
