@@ -93,7 +93,8 @@ Returns: `String` or `false`
 
 Formats and returns a pathname relative to the [`base`](#base) path.
 
-If the `uri` **does not** begin with the `base`, then `false` will be returned instead. Otherwise, the return value will always lead with a slash (`/`).
+If the `uri` **does not** begin with the `base`, then `false` will be returned instead.<br>
+Otherwise, the return value will always lead with a slash (`/`).
 
 > **Note:** This is called automatically within the [`listen()`](#listen) and [`run()`](#runuri) methods.
 
@@ -102,6 +103,7 @@ Type: `String`
 
 The path to format.
 
+> **Note:** Much like [`base`](#base), paths with or without leading and trailing slashes are handled identically.
 
 ### route(uri, replace)
 Returns: `undefined`
