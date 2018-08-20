@@ -7,7 +7,7 @@
   "umd:main": "dist/navaid.umd.js",
   "module": "dist/navaid.mjs",
   "main": "dist/navaid.js",
-  "umd:name": "Navaid",
+  "umd:name": "navaid",
   "license": "MIT",
   "author": {
     "name": "Luke Edwards",
