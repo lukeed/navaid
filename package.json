@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "repository": "lukeed/navaid",
   "description": "A navigation aid (aka, router) for the browser in 850 bytes~!",
-  "unpkg": "dist/navaid.umd.js",
-  "umd:main": "dist/navaid.umd.js",
+  "unpkg": "dist/navaid.min.js",
   "module": "dist/navaid.mjs",
   "main": "dist/navaid.js",
-  "umd:name": "navaid",
   "license": "MIT",
   "author": {
     "name": "Luke Edwards",
@@ -35,12 +33,10 @@
   },
   "devDependencies": {
     "gzip-size": "^3.0.0",
+    "mk-dirs": "^1.0.0",
     "pretty-bytes": "^4.0.2",
-    "rollup": "^0.57.1",
-    "rollup-plugin-buble": "^0.19.2",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^3.0.0",
     "tap-spec": "^5.0.0",
-    "tape": "^4.9.1"
+    "tape": "^4.9.1",
+    "terser": "^3.14.1"
   }
 }
