@@ -17,7 +17,7 @@
   </a>
 </div>
 
-<div align="center">A navigation aid (aka, router) for the browser in 850 bytes~!</div>
+<div align="center">A navigation aid (aka, router) for the browser in 788 bytes~!</div>
 
 ## Install
 
