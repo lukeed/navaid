@@ -9,7 +9,8 @@ export default function Navaid(base, on404) {
 		return rgx ? rgx.test(uri) && (uri.replace(rgx, '') || '/') : uri;
 	}
 
-	if ((base=fmt(base)) === '/') base = '';
+	base = fmt(base);
+	if (base === '/') base = '';
 	if (base) rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
 
 	$.route = function (uri, replace) {
@@ -18,17 +19,17 @@ export default function Navaid(base, on404) {
 
 	$.on = function (pat, fn) {
 		handlers[pat] = fn;
-		var o = convert(pat);
-		o.route = pat;
-		routes.push(o);
+		fn = convert(pat);
+		fn.route = pat;
+		routes.push(fn);
 		return $;
 	}
 
 	$.run = function (uri) {
 		var i=0, params={}, arr, obj;
-		uri = fmt(uri || location.pathname);
-		for (; i < routes.length; i++) {
-			if (arr = (obj = routes[i]).pattern.exec(uri)) {
+		for (; i < routes.length;) {
+			obj = routes[i++];
+			if (arr = obj.pattern.exec(fmt(uri || location.pathname))) {
 				for (i=0; i < obj.keys.length;) params[obj.keys[i]]=arr[++i] || null;
 				handlers[obj.route](params); // todo loop?
 				return $;
@@ -67,7 +68,7 @@ export default function Navaid(base, on404) {
 			off('replacestate', run);
 			off('pushstate', run);
 			off('click', click);
-		};
+		}
 
 		return $.run();
 	}
@@ -75,9 +76,9 @@ export default function Navaid(base, on404) {
 	return $;
 }
 
-function wrap(type) {
+function wrap(type, fn) {
 	type += 'State';
-	var fn = history[type];
+	fn = history[type];
 	history[type] = function (uri) {
 		var ev = new Event(type.toLowerCase());
 		ev.uri = uri;
