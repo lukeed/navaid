@@ -2,7 +2,7 @@
   "name": "navaid",
   "version": "1.0.1",
   "repository": "lukeed/navaid",
-  "description": "A navigation aid (aka, router) for the browser in 829 bytes~!",
+  "description": "A navigation aid (aka, router) for the browser in 831 bytes~!",
   "unpkg": "dist/navaid.min.js",
   "module": "dist/navaid.mjs",
   "main": "dist/navaid.js",
