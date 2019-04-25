@@ -27,9 +27,9 @@ export default function Navaid(base, on404) {
 
 	$.run = function (uri) {
 		var i=0, params={}, arr, obj;
-		for (; i < routes.length;) {
-			obj = routes[i++];
-			if (arr = obj.pattern.exec(fmt(uri || location.pathname))) {
+		uri = fmt(uri || location.pathname);
+		for (; i < routes.length; i++) {
+			if (arr = (obj=routes[i]).pattern.exec(uri)) {
 				for (i=0; i < obj.keys.length;) params[obj.keys[i]]=arr[++i] || null;
 				handlers[obj.route](params); // todo loop?
 				return $;
