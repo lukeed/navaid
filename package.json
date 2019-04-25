@@ -1,6 +1,6 @@
 {
   "name": "navaid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "lukeed/navaid",
   "description": "A navigation aid (aka, router) for the browser in 829 bytes~!",
   "unpkg": "dist/navaid.min.js",
