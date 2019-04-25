@@ -20,7 +20,7 @@ mkdir('dist').then(() => {
 	fs.writeFileSync(pkg.main, CJS);
 
 	// Minify & print gzip-size
-	const { code } = minify(CJS, { toplevel:true });
+	const { code } = minify(CJS, { toplevel:true, compress:{ passes:10 } });
 	console.log(`> gzip size: ${pretty(sizer.sync(code))}`);
 
 	// Write UMD bundle
