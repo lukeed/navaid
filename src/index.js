@@ -9,7 +9,7 @@ export default function Navaid(base, on404) {
 		return rgx ? rgx.test(uri) && (uri.replace(rgx, '') || '/') : uri;
 	}
 
-	base = fmt(base);
+	base = fmt(base || '');
 	if (base === '/') base = '';
 	if (base) rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
 
