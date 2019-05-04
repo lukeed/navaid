@@ -14,7 +14,7 @@ export default function Navaid(base, on404) {
 	if (base) rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
 
 	$.route = function (uri, replace) {
-		history[(replace ? 'replace' : 'push') + 'State'](base + uri, null, base + uri);
+		history[(replace ? 'replace' : 'push') + 'State'](null, null, base + uri);
 	}
 
 	$.on = function (pat, fn) {
@@ -79,8 +79,9 @@ export default function Navaid(base, on404) {
 function wrap(type, fn) {
 	type += 'State';
 	fn = history[type];
-	history[type] = function (uri) {
+	history[type] = function (state, _, uri) {
 		var ev = new Event(type.toLowerCase());
+    ev.state = state;
 		ev.uri = uri;
 		fn.apply(this, arguments);
 		return dispatchEvent(ev);
