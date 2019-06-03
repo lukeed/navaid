@@ -178,6 +178,25 @@ test('$.run (wildcard)', t => {
 	ctx.run('foo/bar/baz/bat/quz');
 });
 
+test('$.run (query)', t => {
+	t.plan(4);
+
+	let ctx = (
+		navaid()
+			.on('foo/*', o => {
+				t.pass('~> called "foo/*" route');
+				t.is(o.wild, 'baz/bat', '~> trims query from "wild" key');
+			})
+			.on('/bar/:id', o => {
+				t.pass('~> called "/bar/:id" route');
+				t.is(o.id, 'hello', '~> trims query from "id" key');
+			})
+	);
+
+	ctx.run('foo/baz/bat?abc=123');
+	ctx.run('bar/hello?a=b&c=d');
+});
+
 test('$.run (404)', t => {
 	t.plan(11);
 
