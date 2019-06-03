@@ -1,7 +1,7 @@
 import convert from 'regexparam';
 
 export default function Navaid(base, on404) {
-	var rgx, routes=[], handlers={}, $={};
+	var rgx, routes=[], $={};
 
 	var fmt = $.format = function (uri) {
 		if (!uri) return uri;
@@ -18,10 +18,8 @@ export default function Navaid(base, on404) {
 	}
 
 	$.on = function (pat, fn) {
-		handlers[pat] = fn;
-		fn = convert(pat);
-		fn.route = pat;
-		routes.push(fn);
+		(pat = convert(pat)).fn = fn;
+		routes.push(pat);
 		return $;
 	}
 
@@ -30,8 +28,10 @@ export default function Navaid(base, on404) {
 		uri = fmt(uri || location.pathname);
 		for (; i < routes.length; i++) {
 			if (arr = (obj=routes[i]).pattern.exec(uri)) {
-				for (i=0; i < obj.keys.length;) params[obj.keys[i]]=arr[++i] || null;
-				handlers[obj.route](params); // todo loop?
+				for (i=0; i < obj.keys.length;) {
+					params[obj.keys[i]] = arr[++i] || null;
+				}
+				obj.fn(params); // todo loop?
 				return $;
 			}
 		}
