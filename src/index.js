@@ -25,17 +25,19 @@ export default function Navaid(base, on404) {
 
 	$.run = function (uri) {
 		var i=0, params={}, arr, obj;
-		uri = fmt(uri || location.pathname);
-		for (; i < routes.length; i++) {
-			if (arr = (obj=routes[i]).pattern.exec(uri)) {
-				for (i=0; i < obj.keys.length;) {
-					params[obj.keys[i]] = arr[++i] || null;
+		if (uri = fmt(uri || location.pathname)) {
+			uri = uri.match(/[^\?#]*/)[0];
+			for (; i < routes.length; i++) {
+				if (arr = (obj=routes[i]).pattern.exec(uri)) {
+					for (i=0; i < obj.keys.length;) {
+						params[obj.keys[i]] = arr[++i] || null;
+					}
+					obj.fn(params); // todo loop?
+					return $;
 				}
-				obj.fn(params); // todo loop?
-				return $;
 			}
+			if (on404) on404(uri);
 		}
-		if (uri && on404) on404(uri);
 		return $;
 	}
 
