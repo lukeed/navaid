@@ -76,8 +76,9 @@ export default function Navaid(base, on404) {
 }
 
 function wrap(type, fn) {
-	type += 'State';
-	fn = history[type];
+	if (history[type]) return;
+	history[type] = type;
+	fn = history[type += 'State'];
 	history[type] = function (uri) {
 		var ev = new Event(type.toLowerCase());
 		ev.uri = uri;
