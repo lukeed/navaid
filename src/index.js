@@ -41,9 +41,10 @@ export default function Navaid(base, on404) {
 		return $;
 	}
 
-	$.listen = function () {
+	$.listen = function (root) {
 		wrap('push');
 		wrap('replace');
+		if (!root) root = window;
 
 		function run(e) {
 			$.run(e.uri);
@@ -51,8 +52,8 @@ export default function Navaid(base, on404) {
 
 		function click(e) {
 			var y, x = e.target.closest('a');
-			if (!x || !x.href || x.target || x.host !== location.host) return;
-			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
+			if (!x || !x.href || x.target || x.host !== location.host) return;
+			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button || e.defaultPrevented) return;
 			if (y = fmt(x.getAttribute('href'))) {
 				e.preventDefault();
 				$.route(y);
@@ -62,13 +63,13 @@ export default function Navaid(base, on404) {
 		addEventListener('popstate', run);
 		addEventListener('replacestate', run);
 		addEventListener('pushstate', run);
-		addEventListener('click', click);
+		root.addEventListener('click', click);
 
 		$.unlisten = function () {
 			removeEventListener('popstate', run);
 			removeEventListener('replacestate', run);
 			removeEventListener('pushstate', run);
-			removeEventListener('click', click);
+			root.removeEventListener('click', click);
 		}
 
 		return $.run();
@@ -79,7 +80,6 @@ export default function Navaid(base, on404) {
 
 function wrap(type, fn) {
 	if (history[type]) return;
-	history[type] = type;
 	fn = history[type += 'State'];
 	history[type] = function (uri) {
 		var ev = new Event(type.toLowerCase());
