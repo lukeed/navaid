@@ -52,7 +52,7 @@ export default function Navaid(base, on404) {
 		function click(e) {
 			var y, x = e.target.closest('a');
 			if (!x || !x.href || x.target || x.host !== location.host) return;
-			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
+			if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button) return;
 			if (y = fmt(x.getAttribute('href'))) {
 				e.preventDefault();
 				$.route(y);
