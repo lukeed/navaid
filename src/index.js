@@ -60,14 +60,10 @@ export default function Navaid(base, on404) {
 		}
 
 		addEventListener('popstate', run);
-		addEventListener('replacestate', run);
-		addEventListener('pushstate', run);
 		addEventListener('click', click);
 
 		$.unlisten = function () {
 			removeEventListener('popstate', run);
-			removeEventListener('replacestate', run);
-			removeEventListener('pushstate', run);
 			removeEventListener('click', click);
 		}
 
