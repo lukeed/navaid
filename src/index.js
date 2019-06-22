@@ -6,15 +6,15 @@ export default function Navaid(base, on404) {
 	var fmt = $.format = function (uri) {
 		if (!uri) return uri;
 		uri = '/' + uri.replace(/^\/|\/$/g, '');
-		return rgx ? rgx.test(uri) && (uri.replace(rgx, '') || '/') : uri;
+		return rgx.test(uri) && uri.replace(rgx, '/');
 	}
 
-	base = fmt(base || '');
-	if (base === '/') base = '';
-	if (base) rgx = new RegExp('^/?' + base.substring(1) + '(?=/|$)', 'i');
+	base = '/' + (base || '').replace(/^\/|\/$/g, '');
+	rgx = base == '/' ? /^\/+/ : new RegExp('^\\' + base + '(?=\\/|$)\\/?', 'i');
 
 	$.route = function (uri, replace) {
-		history[(replace ? 'replace' : 'push') + 'State'](base + uri, null, base + uri);
+		if (uri[0] == '/' && !rgx.test(uri)) uri = base + uri;
+		history[(replace ? 'replace' : 'push') + 'State'](uri, null, uri);
 	}
 
 	$.on = function (pat, fn) {
@@ -46,14 +46,14 @@ export default function Navaid(base, on404) {
 		wrap('replace');
 
 		function run(e) {
-			$.run(e.uri);
+			$.run();
 		}
 
 		function click(e) {
-			var y, x = e.target.closest('a');
-			if (!x || !x.href || x.target || x.host !== location.host) return;
+			var x = e.target.closest('a'), y = x && x.getAttribute('href');
 			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button || e.defaultPrevented) return;
-			if (y = fmt(x.getAttribute('href'))) {
+			if (!y || x.target || x.host !== location.host) return;
+			if (y[0] != '/' || rgx.test(y)) {
 				e.preventDefault();
 				$.route(y);
 			}
