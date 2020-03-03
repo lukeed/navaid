@@ -32,11 +32,12 @@
     "regexparam": "^1.0.2"
   },
   "devDependencies": {
-    "gzip-size": "^3.0.0",
+    "esm": "3.2.25",
+    "gzip-size": "5.1.1",
     "mk-dirs": "^1.0.0",
-    "pretty-bytes": "^4.0.2",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.9.1",
-    "terser": "^3.14.1"
+    "pretty-bytes": "5.3.0",
+    "tap-spec": "5.0.0",
+    "tape": "4.13.2",
+    "terser": "4.6.6"
   }
 }

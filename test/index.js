@@ -1,5 +1,5 @@
-const test = require('tape');
-const navaid = require('../dist/navaid');
+import test from 'tape';
+import navaid from '../src';
 
 global.history = {};
 
