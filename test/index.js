@@ -1,6 +1,8 @@
 const test = require('tape');
 const navaid = require('../dist/navaid');
 
+global.history = {};
+
 test('exports', t => {
 	t.is(typeof navaid, 'function', 'exports a function');
 
@@ -238,4 +240,64 @@ test('$.run (404)', t => {
 	bar.run('/hello/there/world'); // +2
 	bar.run('/world'); // +0 (base no match)
 	bar.run('/'); // +0 (base no match)
+});
+
+test('$.listen', t => {
+	t.plan(12);
+	let ctx = navaid();
+
+	let events = [];
+	function pushState() {}
+	function replaceState() {}
+
+	history.pushState = pushState;
+	history.replaceState = replaceState;
+
+	global.addEventListener = function (evt) {
+		events.push(evt);
+	}
+
+	global.removeEventListener = function (evt) {
+		events.splice(events.indexOf(evt) >>> 1);
+	}
+
+	ctx.run = uri => {
+		t.is(uri, undefined, '~> called $.run() w/o a uri value');
+		return ctx; // match source
+	};
+
+	// ---
+
+	let foo = ctx.listen();
+	t.true(foo == ctx, '(listen) returns the navaid instance');
+	t.is(typeof foo.unlisten, 'function', '~> added `unlisten()` method');
+
+	t.false(history.pushState === pushState, 'wrapped `history.pushState` function');
+	t.false(history.replaceState === replaceState, 'wrapped `history.replaceState` function');
+
+	t.is(events.length, 4, 'added 4 global event listeners');
+	t.true(events.includes('popstate'), '~> has "popstate" listener');
+	t.true(events.includes('replacestate'), '~> has "replacestate" listener');
+	t.true(events.includes('pushstate'), '~> has "pushstate" listener');
+	t.true(events.includes('click'), '~> has "click" listener');
+
+	let bar = ctx.unlisten();
+	t.is(bar, undefined, '(unlisten) returns nothing');
+	t.is(events.length, 0, '~> removed all global event listeners');
+});
+
+test('$.listen(uri)', t => {
+	t.plan(1);
+	let ctx = navaid();
+
+	global.addEventListener = global.removeEventListener = () => {};
+
+	ctx.run = uri => {
+		t.is(uri, '/foobar', '~> called $.run() w/ "/foobar" value');
+		return ctx; // match source
+	};
+
+	// ---
+
+	ctx.listen('/foobar');
 });
