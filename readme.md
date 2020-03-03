@@ -184,7 +184,7 @@ Default: `location.pathname`
 
 The pathname to process. Its matching `handler` (as defined by [`on()`](#onpattern-handler)) will be executed.
 
-### listen()
+### listen(uri?)
 Returns: `Navaid`
 
 Attaches global listeners to synchronize your router with URL changes, which allows Navaid to respond consitently to your browser's <kbd>BACK</kbd> and <kbd>FORWARD</kbd> buttons.
@@ -196,6 +196,12 @@ These are the (global) events that Navaid creates and/or responds to:
 * pushstate
 
 Navaid will also bind to any `click` event(s) on anchor tags (`<a href="" />`) so long as the link has a valid `href` that matches the [`base`](#base) path. Navaid **will not** intercept links that have _any_ `target` attribute or if the link was clicked with a special modifier (eg; <kbd>ALT</kbd>, <kbd>SHIFT</kbd>, <kbd>CMD</kbd>, or <kbd>CTRL</kbd>).
+
+#### uri
+Type: `String`<br>
+Default: `undefined`
+
+*(Optional)* Any value passed to `listen()` will be forwarded to the underlying [`run()`](#runuri) call.<br>When not defined, `run()` will read the current `location.pathname` value.
 
 ### unlisten()
 Returns: `undefined`
