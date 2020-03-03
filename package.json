@@ -18,7 +18,7 @@
   "scripts": {
     "build": "node builder",
     "pretest": "npm run build",
-    "test": "tape test/*.js | tap-spec"
+    "test": "tape r esm test/*.js | tap-spec"
   },
   "files": [
     "dist"
