@@ -41,7 +41,7 @@ export default function Navaid(base, on404) {
 		return $;
 	}
 
-	$.listen = function () {
+	$.listen = function (u) {
 		wrap('push');
 		wrap('replace');
 
@@ -71,7 +71,7 @@ export default function Navaid(base, on404) {
 			removeEventListener('click', click);
 		}
 
-		return $.run();
+		return $.run(u);
 	}
 
 	return $;
