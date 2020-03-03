@@ -6,8 +6,8 @@
   <a href="https://npmjs.org/package/navaid">
     <img src="https://badgen.now.sh/npm/v/navaid" alt="version" />
   </a>
-  <a href="https://travis-ci.org/lukeed/navaid">
-    <img src="https://badgen.now.sh/travis/lukeed/navaid" alt="travis" />
+  <a href="https://github.com/lukeed/navaid/actions">
+    <img src="https://badgen.net/github/status/lukeed/navaid" alt="build status" />
   </a>
   <a href="https://npmjs.org/package/navaid">
     <img src="https://badgen.now.sh/npm/dm/navaid" alt="downloads" />
