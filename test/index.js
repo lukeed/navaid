@@ -301,3 +301,47 @@ test('$.listen(uri)', t => {
 
 	ctx.listen('/foobar');
 });
+
+test('$.route', t => {
+	t.plan(15);
+
+	let pushes = [], replaces = [];
+	history.pushState = uri => pushes.push(uri);
+	history.replaceState = uri => replaces.push(uri);
+
+	let ctx = (
+		navaid('/', () => t.pass('~> ran 404 handler'))
+			.on('/foo', () => t.pass('~> ran "/foo" route'))
+			.on('/bar', () => t.pass('~> ran "/bar" route'))
+	);
+
+	let mock = uri => {
+		pushes = [];
+		replaces = [];
+		console.log(`"${uri}"`);
+		ctx.route(uri);
+		ctx.run(uri);
+	};
+
+	// ---
+
+	mock('/foo'); // +1
+	t.is(pushes.length, 1, '~> pushState("/foo")');
+	t.is(replaces.length, 0, '~> no replaceState calls');
+
+	mock('/foo'); // +1
+	t.is(pushes.length, 0, '~> no pushState calls');
+	t.is(replaces.length, 1, '~> replaceState("/foo") (repeat)');
+
+	mock('/bar'); // +1
+	t.is(pushes.length, 1, '~> pushState("/bar")');
+	t.is(replaces.length, 0, '~> no replaceState calls');
+
+	mock('/404'); // +1
+	t.is(pushes.length, 1, '~> pushState("/404")');
+	t.is(replaces.length, 0, '~> no replaceState calls');
+
+	mock('/404'); // +1
+	t.is(pushes.length, 0, '~> no pushState calls');
+	t.is(replaces.length, 1, '~> replaceState("/404") (repeat)');
+});
