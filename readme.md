@@ -165,7 +165,7 @@ r.on('/users/:id', console.log).run('/users/lukeed');
 r.on('/users/:id/books/:title?', console.log).run('/users/lukeed/books/narnia');
 //=> { id: 'lukeed', title: 'narnia' }
 
-r.on('/users/:id/jobs/*').run('/users/lukeed/jobs/foo/bar/baz/bat');
+r.on('/users/:id/jobs/*', console.log).run('/users/lukeed/jobs/foo/bar/baz/bat');
 //=> { id: 'lukeed', wild: 'foo/bar/baz/bat' }
 ```
 
