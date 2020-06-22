@@ -1,30 +1,39 @@
-import { test } from 'uvu';
+import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
 import navaid from '../src';
 
 global.history = {};
 
-test('exports', () => {
+const API = suite('exports');
+
+API('exports', () => {
 	assert.type(navaid, 'function', 'exports a function');
-
-	let foo = new navaid();
-	assert.type(foo.route, 'function', '~> $.route is a function');
-	assert.type(foo.format, 'function', '~> $.format is a function');
-	assert.type(foo.listen, 'function', '~> $.listen is a function');
-	assert.type(foo.run, 'function', '~> $.run is a function');
-	assert.type(foo.on, 'function', '~> $.on is a function');
-
-	let bar = navaid();
-	assert.type(bar.route, 'function', '~> navaid().route is a function');
-	assert.type(bar.format, 'function', '~> navaid().format is a function');
-	assert.type(bar.listen, 'function', '~> navaid().listen is a function');
-	assert.type(bar.run, 'function', '~> navaid().run is a function');
-	assert.type(bar.on, 'function', '~> navaid().on is a function');
-
-	assert.equal(Object.keys(foo), Object.keys(bar), `new Navaid() === navaid()`);
 });
 
-test('$.format', () => {
+API('new Navaid()', () => {
+	let foo = new navaid();
+	assert.type(foo.route, 'function');
+	assert.type(foo.format, 'function');
+	assert.type(foo.listen, 'function');
+	assert.type(foo.run, 'function');
+	assert.type(foo.on, 'function');
+});
+
+API('Navaid()', () => {
+	let bar = navaid();
+	assert.type(bar.route, 'function');
+	assert.type(bar.format, 'function');
+	assert.type(bar.listen, 'function');
+	assert.type(bar.run, 'function');
+	assert.type(bar.on, 'function');
+});
+
+
+// ---
+
+const format = suite('$.format');
+
+format('empty base', () => {
 	let foo = navaid();
 	assert.is(foo.format(''), '');
 	assert.is(foo.format('/'), '/');
@@ -32,7 +41,9 @@ test('$.format', () => {
 	assert.is(foo.format('foo/bar'), '/foo/bar');
 	assert.is(foo.format('/foobar'), '/foobar');
 	assert.is(foo.format('foobar'), '/foobar');
+});
 
+format('base with leading slash', () => {
 	let bar = navaid('/hello');
 	assert.is(bar.format('/hello/world'), '/world');
 	assert.is(bar.format('hello/world'), '/world');
@@ -41,7 +52,9 @@ test('$.format', () => {
 	assert.is(bar.format('hello/'), '/');
 	assert.is(bar.format('/hello'), '/');
 	assert.is(bar.format('hello'), '/');
+});
 
+format('base without leading slash', () => {
 	let baz = new navaid('hello');
 	assert.is(baz.format('/hello/world'), '/world');
 	assert.is(baz.format('hello/world'), '/world');
@@ -51,7 +64,9 @@ test('$.format', () => {
 	assert.is(baz.format('hello/'), '/');
 	assert.is(baz.format('/hello'), '/');
 	assert.is(baz.format('hello'), '/');
+});
 
+format('base with trailing slash', () => {
 	let bat = navaid('hello/');
 	assert.is(bat.format('/hello/world'), '/world');
 	assert.is(bat.format('hello/world'), '/world');
@@ -61,7 +76,9 @@ test('$.format', () => {
 	assert.is(bat.format('hello/'), '/');
 	assert.is(bat.format('/hello'), '/');
 	assert.is(bat.format('hello'), '/');
+});
 
+format('base with leading and trailing slash', () => {
 	let quz = new navaid('/hello/');
 	assert.is(quz.format('/hello/world'), '/world');
 	assert.is(quz.format('hello/world'), '/world');
@@ -71,13 +88,17 @@ test('$.format', () => {
 	assert.is(quz.format('hello/'), '/');
 	assert.is(quz.format('/hello'), '/');
 	assert.is(quz.format('hello'), '/');
+});
 
+format('base = "/" only', () => {
 	let qut = navaid('/');
 	assert.is(qut.format('/hello/world'), '/hello/world');
 	assert.is(qut.format('hello/world'), '/hello/world');
 	assert.is(qut.format('/world'), '/world');
 	assert.is(qut.format('/'), '/');
+});
 
+format('base with nested path', () => {
 	let qar = new navaid('/hello/there');
 	assert.is(qar.format('hello/there/world/'), '/world');
 	assert.is(qar.format('/hello/there/world/'), '/world');
@@ -88,7 +109,13 @@ test('$.format', () => {
 	assert.is(qar.format('/'), false);
 });
 
-test('$.on', () => {
+format.run();
+
+// ---
+
+const on = suite('$.on');
+
+on('$.on', () => {
 	let ctx = new navaid();
 	let foo = ctx.on('/', () => 'index');
 	assert.equal(ctx, foo, '~> allows chained methods');
@@ -96,7 +123,13 @@ test('$.on', () => {
 	assert.equal(foo, bar, '~> still chainabled');
 });
 
-test('$.run', () => {
+on.run();
+
+// ---
+
+const run = suite('$.run');
+
+run('$.run', () => {
 	let planned = 12;
 	let ctx = new navaid();
 
@@ -133,7 +166,7 @@ test('$.run', () => {
 	assert.is(planned, 0);
 });
 
-test('$.run (base)', () => {
+run('$.run (base)', () => {
 	let planned = 12;
 	let ctx = navaid('/hello/world/');
 
@@ -170,7 +203,7 @@ test('$.run (base)', () => {
 	assert.is(planned, 0);
 });
 
-test('$.run (wildcard)', () => {
+run('$.run (wildcard)', () => {
 	let plan = 2;
 	let ran = false;
 	let ctx = new navaid();
@@ -187,7 +220,7 @@ test('$.run (wildcard)', () => {
 	assert.is(plan, 0);
 });
 
-test('$.run (query)', () => {
+run('$.run (query)', () => {
 	let plan = 2;
 
 	let ctx = (
@@ -208,7 +241,7 @@ test('$.run (query)', () => {
 	assert.is(plan, 0);
 });
 
-test('$.run (404)', () => {
+run('$.run (404)', () => {
 	let plan = 11;
 	let ran = false;
 	let foo = navaid('/', x => {
@@ -252,7 +285,13 @@ test('$.run (404)', () => {
 	assert.is(plan, 0);
 });
 
-test('$.listen', () => {
+run.run();
+
+// ---
+
+const listen = suite('$.listen');
+
+listen('should setup `history` listeners and call $.run', () => {
 	let plan = 12;
 	let ctx = navaid();
 
@@ -303,7 +342,7 @@ test('$.listen', () => {
 	assert.is(plan, 0);
 });
 
-test('$.listen(uri)', () => {
+listen('should process given `uri` value', () => {
 	let ran = false;
 	let ctx = navaid();
 
@@ -321,7 +360,13 @@ test('$.listen(uri)', () => {
 	assert.ok(ran);
 });
 
-test('$.route', () => {
+listen.run();
+
+//
+
+const route = suite('$.route');
+
+route('$.route', () => {
 	let plan = 0;
 	let pushes = [], replaces = [];
 	history.pushState = uri => pushes.push(uri);
@@ -365,4 +410,4 @@ test('$.route', () => {
 	assert.is(plan, 5);
 });
 
-test.run();
+route.run();
