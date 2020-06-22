@@ -1,217 +1,225 @@
-import test from 'tape';
+import { test } from 'uvu';
+import * as assert from 'uvu/assert';
 import navaid from '../src';
 
 global.history = {};
 
-test('exports', t => {
-	t.is(typeof navaid, 'function', 'exports a function');
+test('exports', () => {
+	assert.type(navaid, 'function', 'exports a function');
 
 	let foo = new navaid();
-	t.is(typeof foo.route, 'function', '~> $.route is a function');
-	t.is(typeof foo.format, 'function', '~> $.format is a function');
-	t.is(typeof foo.listen, 'function', '~> $.listen is a function');
-	t.is(typeof foo.run, 'function', '~> $.run is a function');
-	t.is(typeof foo.on, 'function', '~> $.on is a function');
+	assert.type(foo.route, 'function', '~> $.route is a function');
+	assert.type(foo.format, 'function', '~> $.format is a function');
+	assert.type(foo.listen, 'function', '~> $.listen is a function');
+	assert.type(foo.run, 'function', '~> $.run is a function');
+	assert.type(foo.on, 'function', '~> $.on is a function');
 
 	let bar = navaid();
-	t.is(typeof bar.route, 'function', '~> navaid().route is a function');
-	t.is(typeof bar.format, 'function', '~> navaid().format is a function');
-	t.is(typeof bar.listen, 'function', '~> navaid().listen is a function');
-	t.is(typeof bar.run, 'function', '~> navaid().run is a function');
-	t.is(typeof bar.on, 'function', '~> navaid().on is a function');
+	assert.type(bar.route, 'function', '~> navaid().route is a function');
+	assert.type(bar.format, 'function', '~> navaid().format is a function');
+	assert.type(bar.listen, 'function', '~> navaid().listen is a function');
+	assert.type(bar.run, 'function', '~> navaid().run is a function');
+	assert.type(bar.on, 'function', '~> navaid().on is a function');
 
-	t.same(Object.keys(foo), Object.keys(bar), `new Navaid() === navaid()`);
-
-	t.end();
+	assert.equal(Object.keys(foo), Object.keys(bar), `new Navaid() === navaid()`);
 });
 
-test('$.format', t => {
+test('$.format', () => {
 	let foo = navaid();
-	t.is(foo.format(''), '');
-	t.is(foo.format('/'), '/');
-	t.is(foo.format('foo/bar/'), '/foo/bar');
-	t.is(foo.format('foo/bar'), '/foo/bar');
-	t.is(foo.format('/foobar'), '/foobar');
-	t.is(foo.format('foobar'), '/foobar');
+	assert.is(foo.format(''), '');
+	assert.is(foo.format('/'), '/');
+	assert.is(foo.format('foo/bar/'), '/foo/bar');
+	assert.is(foo.format('foo/bar'), '/foo/bar');
+	assert.is(foo.format('/foobar'), '/foobar');
+	assert.is(foo.format('foobar'), '/foobar');
 
 	let bar = navaid('/hello');
-	t.is(bar.format('/hello/world'), '/world');
-	t.is(bar.format('hello/world'), '/world');
-	t.is(bar.format('/world'), false);
-	t.is(bar.format('/hello/'), '/');
-	t.is(bar.format('hello/'), '/');
-	t.is(bar.format('/hello'), '/');
-	t.is(bar.format('hello'), '/');
+	assert.is(bar.format('/hello/world'), '/world');
+	assert.is(bar.format('hello/world'), '/world');
+	assert.is(bar.format('/world'), false);
+	assert.is(bar.format('/hello/'), '/');
+	assert.is(bar.format('hello/'), '/');
+	assert.is(bar.format('/hello'), '/');
+	assert.is(bar.format('hello'), '/');
 
 	let baz = new navaid('hello');
-	t.is(baz.format('/hello/world'), '/world');
-	t.is(baz.format('hello/world'), '/world');
-	t.is(baz.format('/hello.123'), false);
-	t.is(baz.format('/world'), false);
-	t.is(baz.format('/hello/'), '/');
-	t.is(baz.format('hello/'), '/');
-	t.is(baz.format('/hello'), '/');
-	t.is(baz.format('hello'), '/');
+	assert.is(baz.format('/hello/world'), '/world');
+	assert.is(baz.format('hello/world'), '/world');
+	assert.is(baz.format('/hello.123'), false);
+	assert.is(baz.format('/world'), false);
+	assert.is(baz.format('/hello/'), '/');
+	assert.is(baz.format('hello/'), '/');
+	assert.is(baz.format('/hello'), '/');
+	assert.is(baz.format('hello'), '/');
 
 	let bat = navaid('hello/');
-	t.is(bat.format('/hello/world'), '/world');
-	t.is(bat.format('hello/world'), '/world');
-	t.is(bat.format('/hello.123'), false);
-	t.is(bat.format('/world'), false);
-	t.is(bat.format('/hello/'), '/');
-	t.is(bat.format('hello/'), '/');
-	t.is(bat.format('/hello'), '/');
-	t.is(bat.format('hello'), '/');
+	assert.is(bat.format('/hello/world'), '/world');
+	assert.is(bat.format('hello/world'), '/world');
+	assert.is(bat.format('/hello.123'), false);
+	assert.is(bat.format('/world'), false);
+	assert.is(bat.format('/hello/'), '/');
+	assert.is(bat.format('hello/'), '/');
+	assert.is(bat.format('/hello'), '/');
+	assert.is(bat.format('hello'), '/');
 
 	let quz = new navaid('/hello/');
-	t.is(quz.format('/hello/world'), '/world');
-	t.is(quz.format('hello/world'), '/world');
-	t.is(quz.format('/hello.123'), false);
-	t.is(quz.format('/world'), false);
-	t.is(quz.format('/hello/'), '/');
-	t.is(quz.format('hello/'), '/');
-	t.is(quz.format('/hello'), '/');
-	t.is(quz.format('hello'), '/');
+	assert.is(quz.format('/hello/world'), '/world');
+	assert.is(quz.format('hello/world'), '/world');
+	assert.is(quz.format('/hello.123'), false);
+	assert.is(quz.format('/world'), false);
+	assert.is(quz.format('/hello/'), '/');
+	assert.is(quz.format('hello/'), '/');
+	assert.is(quz.format('/hello'), '/');
+	assert.is(quz.format('hello'), '/');
 
 	let qut = navaid('/');
-	t.is(qut.format('/hello/world'), '/hello/world');
-	t.is(qut.format('hello/world'), '/hello/world');
-	t.is(qut.format('/world'), '/world');
-	t.is(qut.format('/'), '/');
+	assert.is(qut.format('/hello/world'), '/hello/world');
+	assert.is(qut.format('hello/world'), '/hello/world');
+	assert.is(qut.format('/world'), '/world');
+	assert.is(qut.format('/'), '/');
 
 	let qar = new navaid('/hello/there');
-	t.is(qar.format('hello/there/world/'), '/world');
-	t.is(qar.format('/hello/there/world/'), '/world');
-	t.is(qar.format('/hello/there/world?foo=bar'), '/world?foo=bar');
-	t.is(qar.format('/hello/there'), '/');
-	t.is(qar.format('hello/there'), '/');
-	t.is(qar.format('/world'), false);
-	t.is(qar.format('/'), false);
-
-	t.end();
+	assert.is(qar.format('hello/there/world/'), '/world');
+	assert.is(qar.format('/hello/there/world/'), '/world');
+	assert.is(qar.format('/hello/there/world?foo=bar'), '/world?foo=bar');
+	assert.is(qar.format('/hello/there'), '/');
+	assert.is(qar.format('hello/there'), '/');
+	assert.is(qar.format('/world'), false);
+	assert.is(qar.format('/'), false);
 });
 
-test('$.on', t => {
+test('$.on', () => {
 	let ctx = new navaid();
 	let foo = ctx.on('/', () => 'index');
-	t.same(ctx, foo, '~> allows chained methods');
+	assert.equal(ctx, foo, '~> allows chained methods');
 	let bar = foo.on('hello', () => 'world');
-	t.same(foo, bar, '~> still chainabled');
-	t.end();
+	assert.equal(foo, bar, '~> still chainabled');
 });
 
-test('$.run', t => {
-	t.plan(13);
+test('$.run', () => {
+	let planned = 12;
 	let ctx = new navaid();
 
 	ctx.on('/', () => {
-		t.pass('~> ran index');
+		planned -= 1;
 	});
 
 	ctx.on('users/:name', o => {
-		t.ok(o, '~> (users) received params object');
-		t.ok(o.name, '~> (users) has "name" key, via pattern');
-		t.is(o.name, 'Bob', '~> (users) the "name" value is expected');
+		assert.ok(o, '~> (users) received params object');
+		assert.ok(o.name, '~> (users) has "name" key, via pattern');
+		assert.is(o.name, 'Bob', '~> (users) the "name" value is expected');
+		planned -= 3;
 	});
 
 	ctx.on('/foo/books/:genre/:title?', o => {
-		t.ok(o, '~> (books) received params object');
-		t.ok(o.genre, '~> (books) has "genre" key, via pattern');
-		t.is(o.genre, 'kids', '~> (books) the "genre" value is expected');
+		assert.ok(o, '~> (books) received params object');
+		assert.ok(o.genre, '~> (books) has "genre" key, via pattern');
+		assert.is(o.genre, 'kids', '~> (books) the "genre" value is expected');
+		planned -= 3;
 		if (o.title) {
-			t.ok(o.title, '~> (books) optionally has "title" key');
-			t.is(o.title, 'narnia', '~> (books) the "title" value is expected');
+			assert.ok(o.title, '~> (books) optionally has "title" key');
+			assert.is(o.title, 'narnia', '~> (books) the "title" value is expected');
+			planned -= 2;
 		}
 	});
 
 	let foo = ctx.run('/');
-	t.same(foo, ctx, '~> allows chained methods');
+	assert.equal(foo, ctx, '~> allows chained methods');
 
 	ctx.run('/users/Bob');
 	ctx.run('foo/books/kids');
 	ctx.run('/foo/books/kids/narnia');
+
+	assert.is(planned, 0);
 });
 
-test('$.run (base)', t => {
-	t.plan(13);
+test('$.run (base)', () => {
+	let planned = 12;
 	let ctx = navaid('/hello/world/');
 
 	ctx.on('/', () => {
-		t.pass('~> ran index');
+		planned -= 1;
 	});
 
 	ctx.on('users/:name', o => {
-		t.ok(o, '~> (users) received params object');
-		t.ok(o.name, '~> (users) has "name" key, via pattern');
-		t.is(o.name, 'Bob', '~> (users) the "name" value is expected');
+		assert.ok(o, '~> (users) received params object');
+		assert.ok(o.name, '~> (users) has "name" key, via pattern');
+		assert.is(o.name, 'Bob', '~> (users) the "name" value is expected');
+		planned -= 3;
 	});
 
 	ctx.on('/foo/books/:genre/:title?', o => {
-		t.ok(o, '~> (books) received params object');
-		t.ok(o.genre, '~> (books) has "genre" key, via pattern');
-		t.is(o.genre, 'kids', '~> (books) the "genre" value is expected');
+		assert.ok(o, '~> (books) received params object');
+		assert.ok(o.genre, '~> (books) has "genre" key, via pattern');
+		assert.is(o.genre, 'kids', '~> (books) the "genre" value is expected');
+		planned -= 3;
 		if (o.title) {
-			t.ok(o.title, '~> (books) optionally has "title" key');
-			t.is(o.title, 'narnia', '~> (books) the "title" value is expected');
+			assert.ok(o.title, '~> (books) optionally has "title" key');
+			assert.is(o.title, 'narnia', '~> (books) the "title" value is expected');
+			planned -= 2;
 		}
 	});
 
 	let foo = ctx.run('/hello/world');
-	t.same(foo, ctx, '~> allows chained methods');
+	assert.equal(foo, ctx, '~> allows chained methods');
 
 	ctx.run('/hello/world/users/Bob');
 	ctx.run('hello/world/foo/books/kids');
 	ctx.run('hello/world/foo/books/kids/narnia');
+
+	assert.is(planned, 0);
 });
 
-test('$.run (wildcard)', t => {
-	t.plan(4);
-
+test('$.run (wildcard)', () => {
+	let plan = 2;
 	let ran = false;
 	let ctx = new navaid();
 	ctx.on('foo/bar/*', o => {
-		t.pass('~> called "foo/bar/*" route');
 		let wild = ran ? 'baz/bat/quz' : 'baz';
-		t.same(o, { wild }, '~> o.wild is expected');
+		assert.equal(o, { wild }, '~> o.wild is expected');
+		plan -= 1;
 		ran = true;
 	});
 
 	ctx.run('foo/bar/baz');
 	ctx.run('foo/bar/baz/bat/quz');
+
+	assert.is(plan, 0);
 });
 
-test('$.run (query)', t => {
-	t.plan(4);
+test('$.run (query)', () => {
+	let plan = 2;
 
 	let ctx = (
 		navaid()
 			.on('foo/*', o => {
-				t.pass('~> called "foo/*" route');
-				t.is(o.wild, 'baz/bat', '~> trims query from "wild" key');
+				plan -= 1;
+				assert.is(o.wild, 'baz/bat', '~> trims query from "wild" key');
 			})
 			.on('/bar/:id', o => {
-				t.pass('~> called "/bar/:id" route');
-				t.is(o.id, 'hello', '~> trims query from "id" key');
+				plan -= 1;
+				assert.is(o.id, 'hello', '~> trims query from "id" key');
 			})
 	);
 
 	ctx.run('foo/baz/bat?abc=123');
 	ctx.run('bar/hello?a=b&c=d');
+
+	assert.is(plan, 0);
 });
 
-test('$.run (404)', t => {
-	t.plan(11);
-
+test('$.run (404)', () => {
+	let plan = 11;
 	let ran = false;
 	let foo = navaid('/', x => {
-		t.pass('~~> called `on404` handler');
 		let uri = ran ? '/foo/bar' : '/bar';
-		t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+		assert.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+		plan -= 2;
 		ran = true;
 	});
 
 	foo.on('/foo', () => {
-		t.pass('~> called "/foo" route');
+		plan -= 1;
 	});
 
 	foo.run('/foo'); // +1
@@ -220,18 +228,18 @@ test('$.run (404)', t => {
 
 	ran = false;
 	let bar = new navaid('/hello/', x => {
-		t.pass('~~> called `on404` handler');
 		let uri = ran ? '/there/world' : '/world';
-		t.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
+		assert.is(x, uri, `~~> handler receives the uri "${x}" (formatted)`);
 		ran = true;
+		plan -= 2;
 	});
 
 	bar.on('/', () => {
-		t.pass('~> called "/hello" route');
+		plan -= 1;
 	});
 
 	bar.on('/bob', () => {
-		t.pass('~> called "/hello/bob" route');
+		plan -= 1;
 	});
 
 	bar.run('/hello'); // +1
@@ -240,10 +248,12 @@ test('$.run (404)', t => {
 	bar.run('/hello/there/world'); // +2
 	bar.run('/world'); // +0 (base no match)
 	bar.run('/'); // +0 (base no match)
+
+	assert.is(plan, 0);
 });
 
-test('$.listen', t => {
-	t.plan(12);
+test('$.listen', () => {
+	let plan = 12;
 	let ctx = navaid();
 
 	let events = [];
@@ -262,63 +272,70 @@ test('$.listen', t => {
 	}
 
 	ctx.run = uri => {
-		t.is(uri, undefined, '~> called $.run() w/o a uri value');
+		plan -= 1;
+		assert.is(uri, undefined, '~> called $.run() w/o a uri value');
 		return ctx; // match source
 	};
 
 	// ---
 
 	let foo = ctx.listen();
-	t.true(foo == ctx, '(listen) returns the navaid instance');
-	t.is(typeof foo.unlisten, 'function', '~> added `unlisten()` method');
+	assert.ok(foo == ctx, '(listen) returns the navaid instance');
+	assert.is(typeof foo.unlisten, 'function', '~> added `unlisten()` method');
+	plan -= 2;
 
-	t.false(history.pushState === pushState, 'wrapped `history.pushState` function');
-	t.false(history.replaceState === replaceState, 'wrapped `history.replaceState` function');
+	assert.not(history.pushState === pushState, 'wrapped `history.pushState` function');
+	assert.not(history.replaceState === replaceState, 'wrapped `history.replaceState` function');
+	plan -= 2;
 
-	t.is(events.length, 4, 'added 4 global event listeners');
-	t.true(events.includes('popstate'), '~> has "popstate" listener');
-	t.true(events.includes('replacestate'), '~> has "replacestate" listener');
-	t.true(events.includes('pushstate'), '~> has "pushstate" listener');
-	t.true(events.includes('click'), '~> has "click" listener');
+	assert.is(events.length, 4, 'added 4 global event listeners');
+	assert.ok(events.includes('popstate'), '~> has "popstate" listener');
+	assert.ok(events.includes('replacestate'), '~> has "replacestate" listener');
+	assert.ok(events.includes('pushstate'), '~> has "pushstate" listener');
+	assert.ok(events.includes('click'), '~> has "click" listener');
+	plan -= 5;
 
 	let bar = ctx.unlisten();
-	t.is(bar, undefined, '(unlisten) returns nothing');
-	t.is(events.length, 0, '~> removed all global event listeners');
+	assert.is(bar, undefined, '(unlisten) returns nothing');
+	assert.is(events.length, 0, '~> removed all global event listeners');
+	plan -= 2;
+
+	assert.is(plan, 0);
 });
 
-test('$.listen(uri)', t => {
-	t.plan(1);
+test('$.listen(uri)', () => {
+	let ran = false;
 	let ctx = navaid();
 
 	global.addEventListener = global.removeEventListener = () => {};
 
 	ctx.run = uri => {
-		t.is(uri, '/foobar', '~> called $.run() w/ "/foobar" value');
+		ran = true;
+		assert.is(uri, '/foobar', '~> called $.run() w/ "/foobar" value');
 		return ctx; // match source
 	};
 
 	// ---
 
 	ctx.listen('/foobar');
+	assert.ok(ran);
 });
 
-test('$.route', t => {
-	t.plan(15);
-
+test('$.route', () => {
+	let plan = 0;
 	let pushes = [], replaces = [];
 	history.pushState = uri => pushes.push(uri);
 	history.replaceState = uri => replaces.push(uri);
 
 	let ctx = (
-		navaid('/', () => t.pass('~> ran 404 handler'))
-			.on('/foo', () => t.pass('~> ran "/foo" route'))
-			.on('/bar', () => t.pass('~> ran "/bar" route'))
+		navaid('/', () => plan++)
+			.on('/foo', () => plan++)
+			.on('/bar', () => plan++)
 	);
 
 	let mock = uri => {
 		pushes = [];
 		replaces = [];
-		console.log(`"${uri}"`);
 		ctx.route(uri);
 		ctx.run(uri);
 	};
@@ -326,22 +343,26 @@ test('$.route', t => {
 	// ---
 
 	mock('/foo'); // +1
-	t.is(pushes.length, 1, '~> pushState("/foo")');
-	t.is(replaces.length, 0, '~> no replaceState calls');
+	assert.is(pushes.length, 1, '~> pushState("/foo")');
+	assert.is(replaces.length, 0, '~> no replaceState calls');
 
 	mock('/foo'); // +1
-	t.is(pushes.length, 0, '~> no pushState calls');
-	t.is(replaces.length, 1, '~> replaceState("/foo") (repeat)');
+	assert.is(pushes.length, 0, '~> no pushState calls');
+	assert.is(replaces.length, 1, '~> replaceState("/foo") (repeat)');
 
 	mock('/bar'); // +1
-	t.is(pushes.length, 1, '~> pushState("/bar")');
-	t.is(replaces.length, 0, '~> no replaceState calls');
+	assert.is(pushes.length, 1, '~> pushState("/bar")');
+	assert.is(replaces.length, 0, '~> no replaceState calls');
 
 	mock('/404'); // +1
-	t.is(pushes.length, 1, '~> pushState("/404")');
-	t.is(replaces.length, 0, '~> no replaceState calls');
+	assert.is(pushes.length, 1, '~> pushState("/404")');
+	assert.is(replaces.length, 0, '~> no replaceState calls');
 
 	mock('/404'); // +1
-	t.is(pushes.length, 0, '~> no pushState calls');
-	t.is(replaces.length, 1, '~> replaceState("/404") (repeat)');
+	assert.is(pushes.length, 0, '~> no pushState calls');
+	assert.is(replaces.length, 1, '~> replaceState("/404") (repeat)');
+
+	assert.is(plan, 5);
 });
+
+test.run();
