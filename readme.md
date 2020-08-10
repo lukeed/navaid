@@ -187,7 +187,7 @@ The pathname to process. Its matching `handler` (as defined by [`on()`](#onpatte
 ### listen(uri?)
 Returns: `Navaid`
 
-Attaches global listeners to synchronize your router with URL changes, which allows Navaid to respond consitently to your browser's <kbd>BACK</kbd> and <kbd>FORWARD</kbd> buttons.
+Attaches global listeners to synchronize your router with URL changes, which allows Navaid to respond consistently to your browser's <kbd>BACK</kbd> and <kbd>FORWARD</kbd> buttons.
 
 These are the (global) events that Navaid creates and/or responds to:
 
