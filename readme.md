@@ -81,7 +81,7 @@ Type: `Function`<br>
 Default: `undefined`
 
 The function to run if the incoming pathname did not match any of your defined defined patterns.<br>
-When defined, this function will receive the formatted `uri` as its only paramter; see [`format()`](#formaturi).
+When defined, this function will receive the formatted `uri` as its only parameter; see [`format()`](#formaturi).
 
 > **Important:** Navaid ***only*** processes routes that match your `base` path!<br>
 Put differently, `on404` will never run for URLs that do not begin with `base`.<br>
