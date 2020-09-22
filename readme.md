@@ -7,7 +7,7 @@
     <img src="https://badgen.now.sh/npm/v/navaid" alt="version" />
   </a>
   <a href="https://github.com/lukeed/navaid/actions">
-    <img src="https://badgen.net/github/status/lukeed/navaid" alt="build status" />
+    <img src="https://github.com/lukeed/navaid/workflows/CI/badge.svg" alt="CI" />
   </a>
   <a href="https://npmjs.org/package/navaid">
     <img src="https://badgen.now.sh/npm/dm/navaid" alt="downloads" />
