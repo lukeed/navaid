@@ -28,6 +28,7 @@ API('Navaid()', () => {
 	assert.type(bar.on, 'function');
 });
 
+API.run();
 
 // ---
 
