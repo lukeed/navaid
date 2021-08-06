@@ -1,4 +1,4 @@
-import convert from 'regexparam';
+import * as convert from 'regexparam';
 
 export default function Navaid(base, on404) {
 	var rgx, curr, routes=[], $={};
