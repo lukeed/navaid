@@ -9,6 +9,9 @@
   <a href="https://github.com/lukeed/navaid/actions">
     <img src="https://github.com/lukeed/navaid/workflows/CI/badge.svg" alt="CI" />
   </a>
+  <a href="https://licenses.dev/npm/navaid">
+    <img src="https://licenses.dev/b/npm/navaid" alt="licenses" />
+  </a>
   <a href="https://npmjs.org/package/navaid">
     <img src="https://badgen.now.sh/npm/dm/navaid" alt="downloads" />
   </a>
